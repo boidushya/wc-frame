@@ -1,0 +1,17 @@
+{
+  "name": "wc-frames",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "frog dev"
+  },
+  "dependencies": {
+    "@walletconnect/ethereum-provider": "^2.11.2",
+    "frog": "latest",
+    "hono": "^4",
+    "qrcode.react": "^3.1.0"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}
