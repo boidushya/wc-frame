@@ -22,18 +22,18 @@ const getConnectionURI = async () => {
 
   console.log("info: provider is initialized");
 
-  await provider.connect();
-
-  console.log("info: provider is connected");
-
-  const response = await new Promise<string>(async (resolve) => {
-    provider.on("display_uri", (uri) => {
-      console.log("info: display_uri is:", uri);
-      resolve(uri);
-    });
-  });
+  const response = await Promise.all([
+    new Promise<string>((resolve) => {
+      provider.on("display_uri", (uri) => {
+        console.log("info: display_uri is:", uri);
+        resolve(uri);
+      });
+    }),
+    provider.connect(),
+  ]);
 
   console.log("info: response is:", response);
+
   return response[0];
 };
 
