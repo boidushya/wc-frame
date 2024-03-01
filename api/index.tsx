@@ -384,7 +384,10 @@ app.frame("/connect", async (c) => {
       </div>
     ),
     ...imgOpts,
-    intents: [<Button action="/sign">I've Connected!</Button>],
+    intents: [
+      <Button action="/sign">I've Connected!</Button>,
+      <Button.Reset>Reset</Button.Reset>,
+    ],
   });
 });
 
