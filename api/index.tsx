@@ -1,6 +1,6 @@
 import { EthereumProvider } from "@walletconnect/ethereum-provider";
 import { Button, Frog, TextInput } from "frog";
-import QRCode from "../utils/QRCode";
+import QRCode from "./QRCode";
 import { PropsWithChildren } from "hono/jsx";
 import { PinataFDK } from "pinata-fdk";
 import { handle } from "frog/vercel";
