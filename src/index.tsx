@@ -56,7 +56,6 @@ const getConnectionURI = async () => {
 export const app = new Frog({
   // Supply a Hub API URL to enable frame verification.
   basePath: "/api",
-  browserLocation: "/:path",
   hubApiUrl: "https://api.hub.wevm.dev",
   verify: "silent",
 });
