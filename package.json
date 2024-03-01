@@ -6,10 +6,11 @@
     "dev": "frog dev"
   },
   "dependencies": {
+    "@types/qrcode": "^1.5.5",
     "@walletconnect/ethereum-provider": "^2.11.2",
     "frog": "latest",
     "hono": "^4",
-    "qrcode.react": "^3.1.0"
+    "qrcode": "^1.5.3"
   },
   "devDependencies": {
     "typescript": "latest"

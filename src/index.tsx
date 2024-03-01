@@ -1,8 +1,6 @@
 import { EthereumProvider } from "@walletconnect/ethereum-provider";
 import { Button, Frog } from "frog";
-import * as QRCODE from "qrcode.react";
-
-const { QRCodeSVG } = QRCODE;
+import QRCode from "./utils/QRCode";
 
 const projectId = "2a2a5978a58aad734d13a2d194ec469a";
 
@@ -22,19 +20,17 @@ const getConnectionURI = async () => {
 
   console.log("info: provider is initialized");
 
-  const response = await Promise.all([
-    new Promise<string>((resolve) => {
-      provider.on("display_uri", (uri) => {
-        console.log("info: display_uri is:", uri);
-        resolve(uri);
-      });
-    }),
-    provider.connect(),
-  ]);
+  const promise = new Promise<string>((resolve) => {
+    provider.once("display_uri", (uri) => {
+      console.log("info: display_uri is:", uri);
+      resolve(uri);
+    });
+  });
 
-  console.log("info: response is:", response);
+  provider.connect();
+  const response = await promise;
 
-  return response[0];
+  return response;
 };
 
 export const app = new Frog({
@@ -70,7 +66,7 @@ app.frame("/connect", async (c) => {
           background: "linear-gradient(to right, #432889, #17101F)",
         }}
       >
-        <QRCodeSVG value={uri} size={256} />
+        <QRCode uri={uri} size={304} />
       </div>
     ),
     intents: [
