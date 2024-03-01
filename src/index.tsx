@@ -4,6 +4,8 @@ import QRCode from "./utils/QRCode";
 import { PropsWithChildren } from "hono/jsx";
 import { PinataFDK } from "pinata-fdk";
 
+import { handle } from "frog/vercel";
+
 const projectId = process.env.PROJECT_ID!;
 
 const fdk = new PinataFDK({
@@ -53,6 +55,8 @@ const getConnectionURI = async () => {
 
 export const app = new Frog({
   // Supply a Hub API URL to enable frame verification.
+  basePath: "/api",
+  browserLocation: "/:path",
   hubApiUrl: "https://api.hub.wevm.dev",
   verify: "silent",
 });
@@ -202,3 +206,6 @@ const frameId = "wc-frame-id";
 const customId = "wc-custom-id";
 
 app.use("/", fdk.analyticsMiddleware({ frameId, customId }));
+
+export const GET = handle(app);
+export const POST = handle(app);

@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "frog dev"
+    "build": "frog vercel-build",
+    "dev": "frog dev",
+    "deploy": "vercel"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.5",
@@ -14,6 +16,7 @@
     "qrcode": "^1.5.3"
   },
   "devDependencies": {
-    "typescript": "latest"
+    "typescript": "latest",
+    "vercel": "^33.5.3"
   }
 }
