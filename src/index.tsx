@@ -2,9 +2,14 @@ import { EthereumProvider } from "@walletconnect/ethereum-provider";
 import { Button, Frog, TextInput } from "frog";
 import QRCode from "./utils/QRCode";
 import { PropsWithChildren } from "hono/jsx";
+import { PinataFDK } from "pinata-fdk";
 
-const projectId = "2a2a5978a58aad734d13a2d194ec469a";
+const projectId = process.env.PROJECT_ID!;
 
+const fdk = new PinataFDK({
+  pinata_jwt: process.env.PINATA_JWT!,
+  pinata_gateway: process.env.PINATA_GATEWAY!,
+});
 const bgColor = {
   backgroundColor: "#121529",
 };
@@ -48,7 +53,8 @@ const getConnectionURI = async () => {
 
 export const app = new Frog({
   // Supply a Hub API URL to enable frame verification.
-  //   hubApiUrl: "https://api.hub.wevm.dev",
+  hubApiUrl: "https://api.hub.wevm.dev",
+  verify: "silent",
 });
 
 const Wrapper = ({ children }: PropsWithChildren) => {
@@ -191,3 +197,8 @@ app.frame("/sign", async (c) => {
     ],
   });
 });
+
+const frameId = "wc-frame-id";
+const customId = "wc-custom-id";
+
+app.use("/", fdk.analyticsMiddleware({ frameId, customId }));
