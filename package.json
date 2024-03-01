@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/qrcode": "^1.5.5",
     "@walletconnect/ethereum-provider": "^2.11.2",
+    "dotenv": "^16.4.5",
     "frog": "latest",
     "hono": "^4",
     "pinata-fdk": "^3.5.5",

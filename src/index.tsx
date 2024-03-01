@@ -3,8 +3,8 @@ import { Button, Frog, TextInput } from "frog";
 import QRCode from "./utils/QRCode";
 import { PropsWithChildren } from "hono/jsx";
 import { PinataFDK } from "pinata-fdk";
-
 import { handle } from "frog/vercel";
+import "dotenv/config";
 
 const projectId = process.env.PROJECT_ID!;
 
