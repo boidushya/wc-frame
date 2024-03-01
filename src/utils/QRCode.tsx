@@ -1,4 +1,3 @@
-import { html } from "hono/html";
 import QRCodeUtil from "qrcode";
 
 type CoordinateMapping = [number, number[]];
@@ -39,8 +38,8 @@ const QrCodeUtil = {
   generate(uri: string, size: number, logoSize: number) {
     const dotColor = "#000";
     const edgeColor = "transparent";
-    const strokeWidth = 10;
-    const dots: string[] = [];
+    const strokeWidth = 6.5;
+    const dots: JSX.Element[] = [];
     const matrix = getMatrix(uri, "Q");
     const cellSize = size / matrix.length;
     const qrList = [
@@ -56,34 +55,35 @@ const QrCodeUtil = {
       for (let i = 0; i < qrList.length; i += 1) {
         const dotSize = cellSize * (QRCODE_MATRIX_MARGIN - i * 2);
         dots.push(
-          `<rect
-              fill="${i === 2 ? dotColor : edgeColor}"
-              width="${i === 0 ? dotSize - strokeWidth : dotSize}"
-              rx= "${
+          <svg>
+            <rect
+              fill={i === 2 ? dotColor : edgeColor}
+              width={i === 0 ? dotSize - strokeWidth : dotSize}
+              rx={
                 i === 0
                   ? (dotSize - strokeWidth) * borderRadius
                   : dotSize * borderRadius
-              }"
-              ry= "${
+              }
+              ry={
                 i === 0
                   ? (dotSize - strokeWidth) * borderRadius
                   : dotSize * borderRadius
-              }"
-              stroke="${dotColor}"
-              stroke-width="${i === 0 ? strokeWidth : 0}"
-              height="${i === 0 ? dotSize - strokeWidth : dotSize}"
-              x= "${
+              }
+              stroke={dotColor}
+              stroke-width={i === 0 ? strokeWidth : 0}
+              height={i === 0 ? dotSize - strokeWidth : dotSize}
+              x={
                 i === 0
                   ? y1 + cellSize * i + strokeWidth / 2
                   : y1 + cellSize * i
-              }"
-              y= "${
+              }
+              y={
                 i === 0
                   ? x1 + cellSize * i + strokeWidth / 2
                   : x1 + cellSize * i
-              }"
+              }
             ></rect>
-          `
+          </svg>
         );
       }
     });
@@ -148,9 +148,14 @@ const QrCodeUtil = {
       .forEach(([cx, cys]) => {
         cys.forEach((cy) => {
           dots.push(
-            `<circle cx="${cx}" cy="${cy}" fill="${dotColor}" r="${
-              cellSize / CIRCLE_SIZE_MODIFIER
-            }"></circle>`
+            <svg>
+              <circle
+                cx={cx}
+                cy={cy}
+                fill={dotColor}
+                r={cellSize / CIRCLE_SIZE_MODIFIER}
+              ></circle>
+            </svg>
           );
         });
       });
@@ -191,17 +196,17 @@ const QrCodeUtil = {
       .forEach(([cx, groups]) => {
         groups.forEach(([y1, y2]) => {
           dots.push(
-            `
+            <svg>
               <line
-                x1="${cx}"
-                x2="${cx}"
-                y1="${y1}"
-                y2="${y2}"
-                stroke="${dotColor}"
-                stroke-width="${cellSize / (CIRCLE_SIZE_MODIFIER / 2)}"
+                x1={cx}
+                x2={cx}
+                y1={y1}
+                y2={y2}
+                stroke={dotColor}
+                stroke-width={cellSize / (CIRCLE_SIZE_MODIFIER / 2)}
                 stroke-linecap="round"
               ></line>
-            `
+            </svg>
           );
         });
       });
@@ -211,18 +216,31 @@ const QrCodeUtil = {
 };
 
 const QRCode = ({ uri, size }: { uri: string; size: number }) => {
-  const qrCodeData = QrCodeUtil.generate(uri, size, 100)
-    .map((dot) => dot.replace(/\s+/g, " ").trim())
-    .filter(Boolean);
-  const markup = `<svg height="${size}" width="${size}">${qrCodeData.join(
-    ""
-  )}</svg>`;
-  console.log(markup);
-
+  const qrCodeData = QrCodeUtil.generate(uri, size, 100);
   return (
-    <svg height={size} width={size}>
-      {qrCodeData.map((item) => html`${item}`)}
-    </svg>
+    <div tw="bg-white p-4 flex rounded-3xl relative">
+      <svg height={size} width={size}>
+        {qrCodeData}
+      </svg>
+      <div
+        style={{
+          top: size / 2 - 30,
+          left: size / 2 - 30,
+          backgroundColor: "#3049CB",
+        }}
+        tw="absolute w-24 h-24 flex items-center justify-center p-4 rounded-3xl"
+      >
+        <svg
+          role="img"
+          viewBox="0 0 24 24"
+          tw="w-full h-full"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="white"
+        >
+          <path d="M4.913 7.519c3.915-3.831 10.26-3.831 14.174 0l.471.461a.483.483 0 0 1 0 .694l-1.611 1.577a.252.252 0 0 1-.354 0l-.649-.634c-2.73-2.673-7.157-2.673-9.887 0l-.694.68a.255.255 0 0 1-.355 0L4.397 8.719a.482.482 0 0 1 0-.693l.516-.507Zm17.506 3.263 1.434 1.404a.483.483 0 0 1 0 .694l-6.466 6.331a.508.508 0 0 1-.709 0l-4.588-4.493a.126.126 0 0 0-.178 0l-4.589 4.493a.508.508 0 0 1-.709 0L.147 12.88a.483.483 0 0 1 0-.694l1.434-1.404a.508.508 0 0 1 .709 0l4.589 4.493c.05.048.129.048.178 0l4.589-4.493a.508.508 0 0 1 .709 0l4.589 4.493c.05.048.128.048.178 0l4.589-4.493a.507.507 0 0 1 .708 0Z" />
+        </svg>
+      </div>
+    </div>
   );
 };
 

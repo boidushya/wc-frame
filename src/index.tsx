@@ -4,6 +4,10 @@ import QRCode from "./utils/QRCode";
 
 const projectId = "2a2a5978a58aad734d13a2d194ec469a";
 
+const bgColor = {
+  backgroundColor: "#121529",
+};
+
 const getConnectionURI = async () => {
   const provider = await EthereumProvider.init({
     projectId,
@@ -41,12 +45,16 @@ export const app = new Frog({
 app.frame("/", (c) => {
   return c.res({
     image: (
-      <div tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col">
+      <div
+        style={bgColor}
+        tw="w-full h-full text-white justify-center items-center flex flex-col"
+      >
         <div tw="flex flex-row">
           <div tw="text-5xl">Press Connect to show QR Code</div>
         </div>
       </div>
     ),
+    imageAspectRatio: "1:1",
     intents: [
       <Button value="connect" action="/connect">
         Connect
@@ -62,16 +70,12 @@ app.frame("/connect", async (c) => {
     image: (
       <div
         tw="w-full h-full bg-slate-700 text-white justify-center items-center flex flex-col"
-        style={{
-          background: "linear-gradient(to right, #432889, #17101F)",
-        }}
+        style={bgColor}
       >
-        <QRCode uri={uri} size={304} />
+        <QRCode uri={uri} size={500} />
       </div>
     ),
-    intents: [
-      <Button value="inc">Connect</Button>,
-      <Button value="dec">Sign</Button>,
-    ],
+    imageAspectRatio: "1:1",
+    intents: [<Button value="dec">Sign</Button>],
   });
 });
